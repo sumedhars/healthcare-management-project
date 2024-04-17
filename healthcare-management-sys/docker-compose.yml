@@ -31,7 +31,7 @@ services:
   appointment-scheduler:
     build: ./appointment-scheduler-service
     ports:
-      - "5003: 5000"
+      - "5003:5000"
     environment:
       MONGO_URI: "mongodb://sumedhars:srsanjeev@mongo:27017/healthcare"
     depends_on:
