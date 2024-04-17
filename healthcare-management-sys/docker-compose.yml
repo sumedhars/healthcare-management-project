@@ -8,9 +8,10 @@ services:
     depends_on:
       - patient-management
       - medical-records
+      - appointment-scheduler
 
   patient-management:
-    build: ./patient-management
+    build: ./patient-management-service
     ports:
       - "5001:5000"
     environment:
@@ -22,6 +23,15 @@ services:
     build: ./medical-records-service
     ports:
       - "5002:5000"
+    environment:
+      MONGO_URI: "mongodb://sumedhars:srsanjeev@mongo:27017/healthcare"
+    depends_on:
+      - mongo
+
+  appointment-scheduler:
+    build: ./appointment-scheduler-service
+    ports:
+      - "5003: 5000"
     environment:
       MONGO_URI: "mongodb://sumedhars:srsanjeev@mongo:27017/healthcare"
     depends_on:
