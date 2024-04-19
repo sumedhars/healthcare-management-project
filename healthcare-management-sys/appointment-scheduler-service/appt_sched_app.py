@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS 
 from pymongo import MongoClient
 from bson import ObjectId
 from bson.errors import InvalidId
 
-app = Flask(__name__)
+# manages all data related to scheduling and tracking appointments
 
+app = Flask(__name__)
+CORS(app)  
 
 # MongoDB Atlas connection string (update with your actual URI)
 uri = "mongodb+srv://sumedhars:srsanjeev@cluster0.jhkpjqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -12,14 +15,16 @@ client = MongoClient(uri)
 db = client['healthcare']
 
 
-@app.route('/appointments', methods=['POST'])
+@app.route('/appointment-scheduler', methods=['POST'])
 def create_appointment():
     appointment_data = request.json
+    if db['appointment-scheduler'].find_one({"_id": appointment_data.get('_id')}):
+        return jsonify({'error': 'Appointment ID already exists'}), 400
     result = db['appointment-scheduler'].insert_one(appointment_data)
     return jsonify({'id': str(result.inserted_id)}), 201
 
 
-@app.route('/appointments/<appointment_id>', methods=['GET'])
+@app.route('/appointment-scheduler/<appointment_id>', methods=['GET'])
 def get_appointment(appointment_id):
     try:
         appointment = db['appointment-scheduler'].find_one({"_id": ObjectId(appointment_id)})
@@ -31,7 +36,7 @@ def get_appointment(appointment_id):
         return jsonify({"error": "Invalid appointment ID format"}), 400
 
 
-@app.route('/appointments/<appointment_id>', methods=['PUT'])
+@app.route('/appointment-scheduler/<appointment_id>', methods=['PUT'])
 def update_appointment(appointment_id):
     try:
         updated_data = request.json
@@ -43,7 +48,7 @@ def update_appointment(appointment_id):
         return jsonify({"error": "Invalid appointment ID format"}), 400
 
 
-@app.route('/appointments/<appointment_id>', methods=['DELETE'])
+@app.route('/appointment-scheduler/<appointment_id>', methods=['DELETE'])
 def delete_appointment(appointment_id):
     try:
         result = db['appointment-scheduler'].delete_one({"_id": ObjectId(appointment_id)})
