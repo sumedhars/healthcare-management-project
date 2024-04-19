@@ -8,25 +8,37 @@
 <body>
     <h1>Add New Medical Record</h1>
     <form id="addRecordForm">
+        <label for="recordId">Record ID:</label>
+        <input type="text" id="recordId" name="recordId" required><br><br>
+
         <label for="patientId">Patient ID:</label>
         <input type="text" id="patientId" name="patientId" required><br><br>
-        
-        <label for="doctorName">Doctor's Name:</label>
-        <input type="text" id="doctorName" name="doctorName" required><br><br>
-        
+
+        <label for="visitDate">Visit Date:</label>
+        <input type="date" id="visitDate" name="visitDate" required><br><br>
+
+        <label for="doctorId">Doctor ID:</label>
+        <input type="text" id="doctorId" name="doctorId" required><br><br>
+
         <label for="diagnosis">Diagnosis:</label>
-        <input type="text" id="diagnosis" name="diagnosis" required><br><br>
-        
-        <label for="treatment">Treatment:</label>
-        <input type="text" id="treatment" name="treatment" required><br><br>
-        
+        <textarea id="diagnosis" name="diagnosis" required></textarea><br><br>
+
+        <label for="treatmentPlan">Treatment Plan:</label>
+        <textarea id="treatmentPlan" name="treatmentPlan" required></textarea><br><br>
+
+        <label for="testResults">Test Results:</label>
+        <textarea id="testResults" name="testResults"></textarea><br><br>
+
+        <label for="immunizationRecords">Immunization Records:</label>
+        <textarea id="immunizationRecords" name="immunizationRecords"></textarea><br><br>
+
         <button type="submit">Submit Record</button>
     </form>
 
     <h2>Fetch a Medical Record</h2>
     <form id="fetchRecordForm">
         <label for="recordId">Record ID:</label>
-        <input type="text" id="recordId" name="recordId" required><br><br>
+        <input type="text" id="fetchRecordId" name="recordId" required><br><br>
         <button type="button" onclick="fetchRecord()">Fetch Record</button>
     </form>
 
@@ -36,12 +48,16 @@
         document.getElementById('addRecordForm').onsubmit = function(event) {
             event.preventDefault();
             const formData = {
+                _id: document.getElementById('recordId').value,
                 patientId: document.getElementById('patientId').value,
-                doctorName: document.getElementById('doctorName').value,
+                visitDate: document.getElementById('visitDate').value,
+                doctorId: document.getElementById('doctorId').value,
                 diagnosis: document.getElementById('diagnosis').value,
-                treatment: document.getElementById('treatment').value
+                treatmentPlan: document.getElementById('treatmentPlan').value,
+                testResults: document.getElementById('testResults').value,
+                immunizationRecords: document.getElementById('immunizationRecords').value
             };
-            
+
             fetch('http://localhost:5002/medical-records', {
                 method: 'POST',
                 headers: {
@@ -55,7 +71,7 @@
         };
 
         function fetchRecord() {
-            const recordId = document.getElementById('recordId').value;
+            const recordId = document.getElementById('fetchRecordId').value;
             fetch(`http://localhost:5002/medical-records/${recordId}`)
                 .then(response => response.json())
                 .then(data => {
