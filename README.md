@@ -3,6 +3,7 @@
 In Progress.
 
 TODO:
+* need to fix the patient form --> patient ID instead of object ID
 1. make forms for each service + make buttons on home page lead to each of their forms respectively
 2. connect the three collections based on patient id - need to set patient id differently
 3. data validation!!! - add database of doctors, make sure date/time valid, 
