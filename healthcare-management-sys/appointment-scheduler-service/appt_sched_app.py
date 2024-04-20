@@ -3,6 +3,8 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from bson import ObjectId
 from bson.errors import InvalidId
+import os
+import csv
 
 # manages all data related to scheduling and tracking appointments
 
@@ -13,6 +15,17 @@ CORS(app)
 uri = "mongodb+srv://sumedhars:srsanjeev@cluster0.jhkpjqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri)
 db = client['healthcare']
+
+
+# load doctor data from csv file - need to review
+def load_doctors():
+    doctors_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'doctors.csv')
+    with open(doctors_path, mode='r') as file:
+        reader = csv.DictReader(file)
+        return {row['doctorID']: row['doctorname'] for row in reader}
+
+
+doctors = load_doctors()
 
 
 @app.route('/appointment-scheduler', methods=['POST'])
