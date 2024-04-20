@@ -48,8 +48,8 @@
         document.getElementById('addRecordForm').onsubmit = function(event) {
             event.preventDefault();
             const formData = {
-                recordID: document.getElementById('recordID').value,  // This should be converted to match MongoDB's _id format if needed
-                patientID: document.getElementById('patientID').value,  // This must match the key used in the database
+                recordID: document.getElementById('recordID').value, 
+                patientID: document.getElementById('patientID').value,  
                 visitDate: document.getElementById('visitDate').value,
                 doctorID: document.getElementById('doctorID').value,
                 diagnosis: document.getElementById('diagnosis').value,

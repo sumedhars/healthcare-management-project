@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  
 from pymongo import MongoClient
 from bson import ObjectId
+import logging
 
 # store comprehensive clinical data about patients
 
@@ -17,6 +18,12 @@ db = client['healthcare']
 def add_medical_record():
     record_data = request.json
     record_id = record_data.get('recordID')
+    patient_id = record_data.get('patientID')
+    logging.debug("Looking up patient with ID: %s", patient_id)
+    patient = db['patients'].find_one({"patientID": patient_id})
+    if not patient:
+        logging.error("No patient found with ID: %s", patient_id)
+        return jsonify({'error': 'PatientID does not exist'}), 400
     if db['medical-records'].find_one({"recordID": record_id}):
         return jsonify({'error': 'Record ID already exists'}), 400
     record_data['_id'] = record_id

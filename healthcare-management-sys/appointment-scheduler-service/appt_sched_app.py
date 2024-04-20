@@ -18,7 +18,11 @@ db = client['healthcare']
 @app.route('/appointment-scheduler', methods=['POST'])
 def create_appointment():
     appointment_data = request.json
-    appointment_id = appointment_data.get('appointmentID')  
+    appointment_id = appointment_data.get('appointmentID')
+    patient_id = appointment_data.get('patientID')
+    patient = db['patients'].find_one({"patientID": patient_id})
+    if not patient:
+        return jsonify({'error': 'PatientID does not exist'}), 400
     if db['appointment-scheduler'].find_one({"appointmentID": appointment_id}):
         return jsonify({'error': 'Appointment ID already exists'}), 400
     appointment_data['_id'] = appointment_id
