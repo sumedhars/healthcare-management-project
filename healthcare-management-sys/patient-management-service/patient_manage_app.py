@@ -3,12 +3,10 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from bson import ObjectId
 
-# handle all aspects of patient profile and demographic data management
 
 app = Flask(__name__)
 CORS(app)  
 
-# MongoDB Atlas connection string - uri
 uri = "mongodb+srv://sumedhars:srsanjeev@cluster0.jhkpjqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri)
 db = client['healthcare']
@@ -17,10 +15,10 @@ db = client['healthcare']
 @app.route('/patients', methods=['POST'])
 def add_patient():
     patient_data = request.json
-    patient_id = patient_data.get('patientId')  
-    if db['patients'].find_one({"patientId": patient_id}):
+    patient_id = patient_data.get('patientID')  
+    if db['patients'].find_one({"patientID": patient_id}):
         return jsonify({'error': 'Patient ID already exists'}), 400
-    patient_data['_id'] = patient_id  # use patientId as the primary key 
+    patient_data['_id'] = patient_id
     result = db.patients.insert_one(patient_data)
     return jsonify({'id': patient_id}), 201
 
@@ -28,7 +26,7 @@ def add_patient():
 @app.route('/patients/<patient_id>', methods=['GET'])
 def get_patient(patient_id):
     try:
-        patient = db['patients'].find_one({"patientId": patient_id})  
+        patient = db['patients'].find_one({"patientID": patient_id})
         if patient:
             return jsonify(patient), 200
         else:

@@ -16,22 +16,24 @@ db = client['healthcare']
 @app.route('/medical-records', methods=['POST'])
 def add_medical_record():
     record_data = request.json
-    if db['medical-records'].find_one({"_id": record_data.get('_id')}):
+    record_id = record_data.get('recordID')
+    if db['medical-records'].find_one({"recordID": record_id}):
         return jsonify({'error': 'Record ID already exists'}), 400
+    record_data['_id'] = record_id
     result = db['medical-records'].insert_one(record_data)
-    return jsonify({'id': str(result.inserted_id)}), 201
+    return jsonify({'id': record_id}), 201
 
 
 @app.route('/medical-records/<record_id>', methods=['GET'])
 def get_medical_record(record_id):
     try:
-        record = db['medical-records'].find_one({"_id": ObjectId(record_id)})
-        if record:
-            return jsonify(record), 200
+        medical_record = db['medical-records'].find_one({"recordID": record_id})
+        if medical_record:
+            return jsonify(medical_record), 200
         else:
-            return jsonify({"error": "Medical record not found"}), 404
+            return jsonify({"error": "Medical Record not found"}), 404
     except:
-        return jsonify({"error": "Invalid record ID format"}), 400
+        return jsonify({"error": "Invalid medical record ID format"}), 400
 
 
 if __name__ == '__main__':
