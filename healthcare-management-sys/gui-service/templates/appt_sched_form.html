@@ -8,6 +8,9 @@
 <body>
     <h1>Schedule an Appointment</h1>
     <form id="addApptForm">
+        <label for="appointmentID">Appointment ID:</label>
+        <input type="text" id="appointmentID" name="appointmentID" required><br><br>
+
         <label for="patientId">Patient ID:</label>
         <input type="text" id="patientId" name="PatientID" required><br><br>
 
@@ -42,6 +45,22 @@
 
     <div id="apptResult"></div>
 
+    <h2>Update an Appointment</h2>
+    <form id="updateApptForm">
+        <label for="updateApptId">Appointment ID:</label>
+        <input type="text" id="updateApptId" name="apptId" required><br><br>
+        <label for="updateNotes">New Notes:</label>
+        <textarea id="updateNotes" name="Notes" rows="4" cols="50"></textarea><br><br>
+        <button type="button" onclick="updateAppointment()">Update Appointment</button>
+    </form>
+
+    <h2>Delete an Appointment</h2>
+    <form id="deleteApptForm">
+        <label for="deleteApptId">Appointment ID:</label>
+        <input type="text" id="deleteApptId" name="apptId" required><br><br>
+        <button type="button" onclick="deleteAppointment()">Delete Appointment</button>
+    </form>
+
     <script>
         document.getElementById('addApptForm').onsubmit = function(event) {
             event.preventDefault();
@@ -63,7 +82,7 @@
 
         function fetchAppointment() {
             const appointmentId = document.getElementById('fetchApptId').value;
-            fetch(`http://localhost:5003/appointment-scheduler${appointmentId}`)
+            fetch(`http://localhost:5003/appointment-scheduler/${appointmentId}`)
                 .then(response => response.json())
                 .then(data => {
                     if(data.error) {
@@ -73,6 +92,31 @@
                     }
                 })
                 .catch(error => document.getElementById('apptResult').innerHTML = 'Error fetching appointment: ' + error);
+        }
+
+        function updateAppointment() {
+            const appointmentId = document.getElementById('updateApptId').value;
+            const notes = document.getElementById('updateNotes').value;
+            fetch(`http://localhost:5003/appointment-scheduler/${appointmentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ Notes: notes })
+            })
+            .then(response => response.json())
+            .then(data => alert('Appointment Updated: ' + JSON.stringify(data)))
+            .catch(error => alert('Error updating appointment: ' + error));
+        }
+
+        function deleteAppointment() {
+            const appointmentId = document.getElementById('deleteApptId').value;
+            fetch(`http://localhost:5003/appointment-scheduler/${appointmentId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => alert('Appointment Deleted: ' + JSON.stringify(data)))
+            .catch(error => alert('Error deleting appointment: ' + error));
         }
     </script>
 </body>

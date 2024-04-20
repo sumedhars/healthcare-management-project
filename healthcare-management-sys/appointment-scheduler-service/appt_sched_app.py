@@ -18,45 +18,37 @@ db = client['healthcare']
 @app.route('/appointment-scheduler', methods=['POST'])
 def create_appointment():
     appointment_data = request.json
-    if db['appointment-scheduler'].find_one({"_id": appointment_data.get('_id')}):
+    if db['appointment-scheduler'].find_one({"appointmentID": appointment_data.get('appointmentID')}):
         return jsonify({'error': 'Appointment ID already exists'}), 400
     result = db['appointment-scheduler'].insert_one(appointment_data)
-    return jsonify({'id': str(result.inserted_id)}), 201
+    return jsonify({'appointmentID': appointment_data['appointmentID']}), 201
 
 
 @app.route('/appointment-scheduler/<appointment_id>', methods=['GET'])
 def get_appointment(appointment_id):
-    try:
-        appointment = db['appointment-scheduler'].find_one({"_id": ObjectId(appointment_id)})
-        if appointment:
-            appointment['_id'] = str(appointment['_id']) 
-            return jsonify(appointment), 200
-        return jsonify({"error": "Appointment not found"}), 404
-    except InvalidId:
-        return jsonify({"error": "Invalid appointment ID format"}), 400
+    appointment = db['appointment-scheduler'].find_one({"appointmentID": appointment_id})
+    if appointment:
+        if '_id' in appointment:
+            appointment['_id'] = str(appointment['_id'])
+        return jsonify(appointment), 200
+    return jsonify({"error": "Appointment not found"}), 404
 
 
 @app.route('/appointment-scheduler/<appointment_id>', methods=['PUT'])
 def update_appointment(appointment_id):
-    try:
-        updated_data = request.json
-        result = db['appointment-scheduler'].update_one({"_id": ObjectId(appointment_id)}, {"$set": updated_data})
-        if result.modified_count:
-            return jsonify({"success": "Appointment updated"}), 200
-        return jsonify({"error": "No changes made or appointment not found"}), 404
-    except InvalidId:
-        return jsonify({"error": "Invalid appointment ID format"}), 400
+    updated_data = request.json
+    result = db['appointment-scheduler'].update_one({"appointmentID": appointment_id}, {"$set": updated_data})
+    if result.modified_count:
+        return jsonify({"success": "Appointment updated"}), 200
+    return jsonify({"error": "No changes made or appointment not found"}), 404
 
 
 @app.route('/appointment-scheduler/<appointment_id>', methods=['DELETE'])
 def delete_appointment(appointment_id):
-    try:
-        result = db['appointment-scheduler'].delete_one({"_id": ObjectId(appointment_id)})
-        if result.deleted_count:
-            return jsonify({"success": "Appointment deleted"}), 200
-        return jsonify({"error": "Appointment not found"}), 404
-    except InvalidId:
-        return jsonify({"error": "Invalid appointment ID format"}), 400
+    result = db['appointment-scheduler'].delete_one({"appointmentID": appointment_id})
+    if result.deleted_count:
+        return jsonify({"success": "Appointment deleted"}), 200
+    return jsonify({"error": "Appointment not found"}), 404
 
 
 if __name__ == '__main__':
