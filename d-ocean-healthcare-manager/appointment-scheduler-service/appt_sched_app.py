@@ -18,14 +18,14 @@ db = client['healthcare']
 
 
 # load doctor data from csv file - need to review
-def load_doctors():
-    doctors_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'doctors.csv')
-    with open(doctors_path, mode='r') as file:
-        reader = csv.DictReader(file)
-        return {row['doctorID']: row['doctorname'] for row in reader}
+# def load_doctors():
+#     doctors_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'doctors.csv')
+#     with open(doctors_path, mode='r') as file:
+#         reader = csv.DictReader(file)
+#         return {row['doctorID']: row['doctorname'] for row in reader}
 
 
-doctors = load_doctors()
+# doctors = load_doctors()
 
 
 @app.route('/appointment-scheduler', methods=['POST'])

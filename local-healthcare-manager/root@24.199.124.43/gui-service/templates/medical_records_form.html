@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medical Record</title>
+</head>
+<body>
+    <h1>Add New Medical Record</h1>
+    <form id="addRecordForm">
+        <label for="recordID">Record ID:</label>
+        <input type="text" id="recordID" name="recordID" required><br><br>
+
+        <label for="patientID">Patient ID:</label>
+        <input type="text" id="patientID" name="patientID" required><br><br>
+
+        <label for="visitDate">Visit Date:</label>
+        <input type="date" id="visitDate" name="visitDate" required><br><br>
+
+        <label for="doctorID">Doctor ID:</label>
+        <input type="text" id="doctorID" name="doctorID" required><br><br>
+
+        <label for="diagnosis">Diagnosis:</label>
+        <textarea id="diagnosis" name="diagnosis" required></textarea><br><br>
+
+        <label for="treatmentPlan">Treatment Plan:</label>
+        <textarea id="treatmentPlan" name="treatmentPlan" required></textarea><br><br>
+
+        <label for="testResults">Test Results:</label>
+        <textarea id="testResults" name="testResults"></textarea><br><br>
+
+        <label for="immunizationRecords">Immunization Records:</label>
+        <textarea id="immunizationRecords" name="immunizationRecords"></textarea><br><br>
+
+        <button type="submit">Submit Record</button>
+    </form>
+
+    <h2>Fetch a Medical Record</h2>
+    <form id="fetchRecordForm">
+        <label for="recordID">Record ID:</label>
+        <input type="text" id="fetchRecordId" name="recordID" required><br><br>
+        <button type="button" onclick="fetchRecord()">Fetch Record</button>
+    </form>
+
+    <div id="recordResult"></div>
+
+    <script>
+        document.getElementById('addRecordForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = {
+                recordID: document.getElementById('recordID').value, 
+                patientID: document.getElementById('patientID').value,  
+                visitDate: document.getElementById('visitDate').value,
+                doctorID: document.getElementById('doctorID').value,
+                diagnosis: document.getElementById('diagnosis').value,
+                treatmentPlan: document.getElementById('treatmentPlan').value,
+                testResults: document.getElementById('testResults').value,
+                immunizationRecords: document.getElementById('immunizationRecords').value
+            };
+
+            fetch('http://localhost:5002/medical-records', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('Record added with ID: ' + data.id); 
+                }
+            })
+            .catch(error => alert('Error adding record: ' + error));
+        };
+
+        function fetchRecord() {
+            const recordId = document.getElementById('fetchRecordId').value;
+            fetch(`http://localhost:5002/medical-records/${recordId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.error) {
+                        document.getElementById('recordResult').innerHTML = 'Error: ' + data.error;
+                    } else {
+                        document.getElementById('recordResult').innerHTML = 'Record Found: <pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    }
+                })
+                .catch(error => document.getElementById('recordResult').innerHTML = 'Error fetching record: ' + error);
+        }
+    </script>
+</body>
+</html>

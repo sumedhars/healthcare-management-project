@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Patient</title>
+</head>
+<body>
+    <h1>Add New Patient</h1>
+    <form id="addPatientForm">
+        <label for="patientID">Patient ID:</label>
+        <input type="text" id="patientID" name="patientID" required><br><br>
+
+        <label for="patientName">Patient Name:</label>
+        <input type="text" id="patientName" name="patientName" required><br><br>
+
+        <label for="dateOfBirth">Date of Birth:</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" required><br><br>
+
+        <label for="phone">Cell Phone Number:</label>
+        <input type="tel" id="phone" name="phone"><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br><br>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" required></textarea><br><br>
+
+        <label for="insuranceCompany">Insurance Company:</label>
+        <input type="text" id="insuranceCompany" name="insuranceCompany" required><br><br>
+
+        <label for="policyNumber">Insurance Policy Number:</label>
+        <input type="text" id="policyNumber" name="policyNumber" pattern="\d{1,13}" title="Enter a number up to 13 digits long" required><br><br>
+        
+        <button type="submit">Submit Record</button>
+    </form>
+
+    <h2>Fetch Patient Information</h2>
+    <form id="fetchPatientForm">
+        <label for="fetchPatientId">Patient ID:</label>
+        <input type="text" id="fetchPatientId" name="patientID" required><br><br>
+        <button type="button" onclick="fetchPatient()">Fetch Patient</button>
+    </form>
+
+    <div id="recordResult"></div>
+
+    <script>
+        document.getElementById('addPatientForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = {
+                patientID: document.getElementById('patientID').value,  
+                patientName: document.getElementById('patientName').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                phoneNumber: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                insuranceCompany: document.getElementById('insuranceCompany').value,
+                policyNumber: document.getElementById('policyNumber').value
+            };
+    
+            fetch('http://64.23.245.95:5001/patients', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => alert('Patient added with ID: ' + data.id))
+            .catch(error => alert('Error adding patient: ' + error));
+        };
+
+        function fetchPatient() {
+        const patientId = document.getElementById('fetchPatientId').value;  
+        fetch(`http://64.23.245.95:5001/patients/${patientId}`, {  
+            method: 'GET'  
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.error) {
+                document.getElementById('recordResult').innerHTML = 'Error: ' + data.error;
+            } else {
+                document.getElementById('recordResult').innerHTML = 'Record Found: <pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            }
+        })
+        .catch(error => document.getElementById('recordResult').innerHTML = 'Error fetching record: ' + error);
+    }
+    </script>
+    
+</body>
+</html>
