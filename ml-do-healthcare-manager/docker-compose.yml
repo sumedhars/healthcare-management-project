@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  gui:
+    build: ./gui-service
+    ports:
+      - "5000:5000"
+    depends_on:
+      - patient-management
+      - medical-records
+      - appointment-scheduler
+
+  patient-management:
+    build: ./patient-management-service
+    ports:
+      - "5001:5000"
+    environment:
+      MONGO_URI: "mongodb+srv://sumedhars:srsanjeev@cluster0.jhkpjqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    depends_on:
+      - mongo
+
+  medical-records:
+    build: ./medical-records-service
+    ports:
+      - "5002:5000"
+    environment:
+      MONGO_URI: "mongodb+srv://sumedhars:srsanjeev@cluster0.jhkpjqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    depends_on:
+      - mongo
+
+  appointment-scheduler:
+    build: ./appointment-scheduler-service
+    ports:
+      - "5003:5000"
+    environment:
+      MONGO_URI: "mongodb+srv://sumedhars:srsanjeev@cluster0.jhkpjqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sumedhars
+      MONGO_INITDB_ROOT_PASSWORD: srsanjeev
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
