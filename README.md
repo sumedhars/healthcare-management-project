@@ -15,6 +15,8 @@ Platform used to deploy the app is DigitalOcean Droplet and Docker Compose is ut
 
 TODO: describe three folders
 
+TODO: instructions for installation, and documentation of your api with simple use case(s
+
 ### Author
 Sumedha Sanjeev
 sanjeevs@msoe.edu
