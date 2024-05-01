@@ -58,7 +58,7 @@
                 immunizationRecords: document.getElementById('immunizationRecords').value
             };
 
-            fetch('http://64.23.245.95:5002/medical-records', {
+            fetch('http://64.23.232.121:5002/medical-records', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@
 
         function fetchRecord() {
             const recordId = document.getElementById('fetchRecordId').value;
-            fetch(`http://64.23.245.95:5002/medical-records/${recordId}`)
+            fetch(`http://64.23.232.121:5002/medical-records/${recordId}`)
                 .then(response => response.json())
                 .then(data => {
                     if(data.error) {

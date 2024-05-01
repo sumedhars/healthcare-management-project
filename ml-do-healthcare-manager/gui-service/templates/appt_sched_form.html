@@ -68,7 +68,7 @@
             const jsonData = {};
             formData.forEach((value, key) => { jsonData[key] = value; });
 
-            fetch('http://64.23.245.95:5003/appointment-scheduler', {
+            fetch('http://64.23.232.121:5003/appointment-scheduler', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@
 
         function fetchAppointment() {
             const appointmentId = document.getElementById('fetchApptId').value;
-            fetch(`http://64.23.245.95:5003/appointment-scheduler/${appointmentId}`)
+            fetch(`http://64.23.232.121:5003/appointment-scheduler/${appointmentId}`)
                 .then(response => response.json())
                 .then(data => {
                     if(data.error) {
@@ -97,7 +97,7 @@
         function updateAppointment() {
             const appointmentId = document.getElementById('updateApptId').value;
             const notes = document.getElementById('updateNotes').value;
-            fetch(`http://64.23.245.95:5003/appointment-scheduler/${appointmentId}`, {
+            fetch(`http://64.23.232.121:5003/appointment-scheduler/${appointmentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,7 +111,7 @@
 
         function deleteAppointment() {
             const appointmentId = document.getElementById('deleteApptId').value;
-            fetch(`http://64.23.245.95:5003/appointment-scheduler/${appointmentId}`, {
+            fetch(`http://64.23.232.121:5003/appointment-scheduler/${appointmentId}`, {
                 method: 'DELETE'
             })
             .then(response => response.json())

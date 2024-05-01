@@ -12,9 +12,16 @@ import joblib
 # Load data
 data = pd.read_csv('training_data.csv')
 
+# Drop 'patientID' from the training set
+data = data.drop('patientID', axis=1)
+
+# Define features to use for training and prediction
+train_features = data.drop('RiskLabel', axis=1).columns
+predict_features = ['age', 'diagnosis', 'TreatmentPlan', 'ImmunizationStatus', 'InsuranceStatus']
+
 # Preprocess data
-categorical_features = ['diagnosis', 'TreatmentPlan']
-numeric_features = ['age', 'ImmunizationStatus', 'InsuranceStatus', 'VisitInLastMonth']
+categorical_features = ['diagnosis', 'TreatmentPlan', 'TreatmentResults']
+numeric_features = ['age']
 
 # Create transformers for numeric and categorical data
 numeric_transformer = StandardScaler()
@@ -32,7 +39,7 @@ pipeline = make_pipeline(preprocessor, LogisticRegression())
 
 # Prepare target variable where True indicates 'at risk'
 y = data['RiskLabel'].astype(bool)
-X = data.drop('RiskLabel', axis=1)
+X = data[train_features]
 
 # Split data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
