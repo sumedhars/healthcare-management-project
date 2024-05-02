@@ -33,11 +33,14 @@ While the functionality mostly remains the same, below are the descriptions for 
 2. `/d-ocean-healthcare-manager`: Runs the application on a digital ocean droplet. To do this, log into to DigitalOcean and create a droplet. Install Docker<sup>1</sup> on the DigitalOcean Droplet. After doing this, copy the ipv4 of the Droplet as displayed in the DigitalOcean UI. Navigate to your console and `ssh` into the droplet by typing `ssh root@<ipv4-address>`. Create a folder called `healthcare` in the droplet. Use `scp -r <local-repo-folder-location/d-ocean-healthcare-manager> ~/healthcare` in a new window (on your local machine) to copy over the local files onto the Digital Ocean droplet. After switching into the directory, run `docker compose up --build -d` in the Droplet connection window to build the application. The application should then be running at ipv4-address:5000 .
 3. `/ml-do-healthcare-manager`: Contains additional data & training Scripts for Patient Risk prediction ML model - has the training dataset and scripts necessary to train and serialize the ML model used in patient management. To run this, repeat the steps above for `/d-ocean-healthcare-manager` and it should run.
 
-TODO: instructions for installation, and documentation of your api with simple use case(s)
 
 ### Use Case Screenshots:
 **Homepage**
 ![Screenshot (757)](https://github.com/sumedhars/healthcare-management-project/assets/93266225/e5e80e39-6970-4c3d-a541-fbc6339b3292)
+
+**Sample Documents stored in MongoDB & Database-Collection structure**
+![Screenshot (772)](https://github.com/sumedhars/healthcare-management-project/assets/93266225/e3718ccb-10b7-45ac-89db-af25f229648f)
+
 
 
 ### Author
