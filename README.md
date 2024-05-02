@@ -35,6 +35,7 @@ While the functionality mostly remains the same, below are the descriptions for 
 
 TODO: instructions for installation, and documentation of your api with simple use case(s)
 
+### Use Case Screenshots:
 **Homepage**
 ![Screenshot (757)](https://github.com/sumedhars/healthcare-management-project/assets/93266225/e5e80e39-6970-4c3d-a541-fbc6339b3292)
 
